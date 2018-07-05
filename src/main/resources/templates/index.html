@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+
+<title></title>
+
+<!-- 引入bootstrap样式 -->
+<link href="bootstrap-3.3.7\css\bootstrap.min.css" rel="stylesheet" />
+<!-- 引入bootstrap-table样式 -->
+<link href="bootstrap-table-1.8.1/bootstrap-table.min.css"
+	rel="stylesheet" />
+<!-- jquery -->
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<!-- bootstrap-table.min.js -->
+<script src="bootstrap-table-1.8.1/bootstrap-table.min.js"></script>
+<!-- 引入中文语言包 -->
+<script src="bootstrap-table-1.8.1/locale/bootstrap-table-zh-CN.min.js"></script>
+</head>
+
+<body>
+	<div class="panel panel-default">
+		<div class="panel-heading">查询条件</div>
+		<div class="panel-body form-group" style="margin-bottom: 0px;">
+			<label class="col-sm-1 control-label"
+				style="text-align: right; margin-top: 5px">编号：</label>
+			<div class="col-sm-2">
+				<input type="text" class="form-control" name="Name" id="search_name" />
+			</div>
+			<div class="col-sm-1 col-sm-offset-4">
+				<button class="btn btn-primary" id="search_btn">查询</button>
+			</div>
+			<div class="col-sm-1 col-sm-offset-4">
+				<button class="btn btn-primary" id="excel_btn">导出excel</button>
+			</div>
+		</div>
+	</div>
+	<table id="test-table" class="col-xs-12" data-toolbar="#toolbar">
+	</table>
+</body>
+<script type="text/javascript">
+	$(function() {
+		initTable();
+	})
+	function initTable() {
+		$('#test-table').bootstrapTable({
+			method : 'post',
+			contentType : "application/x-www-form-urlencoded",//当请求方法为post的时候,必须要有！！！！  
+			url : "/getshuju",//请求路径  
+			striped : true, //是否显示行间隔色  
+			pageNumber : 1, //初始化加载第一页  
+			pagination : true,//是否分页  
+			sidePagination : 'server',//server:服务器端分页|client：前端分页  
+			pageSize : 5,//单页记录数  
+			search : false, //是否显示表格搜索
+			pageList : [ 5, 10, 20, 30 ],//可选择单页记录数  
+			showRefresh : true,//刷新按钮  
+			queryParamsType : "limit",
+			queryParams : function(params) {//上传服务器的参数  
+				var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的  
+					limit : params.limit, // 每页显示数量  
+					offset : params.offset, // SQL语句起始索引  
+
+					//page: (params.offset / params.limit) + 1,   //当前页码  
+
+					Name : $('#search_name').val(),
+				// Tel:$('#search_tel').val()  
+				};
+
+				return temp;
+			},
+
+			columns : [ {
+
+				field : 'pname',
+				title : '客户编号',
+				align : 'center'
+			}, {
+				field : 'dno',
+				title : '药品编号',
+				align : 'center'
+			}, {
+				field : 'sex',
+				title : '性别',
+				align : 'center'
+			}, {
+				field : 'age',
+				title : '年龄',
+				align : 'center'
+			}, {
+				field : 'phone',
+				title : '电话',
+				align : 'center'
+			//}, {
+				//field : 'id',
+				//title : '操作',
+				//align : 'center',
+			//formatter:function(value,row,index){
+			//                  //           通过formatter可以自定义列显示的内容
+			//    value：当前field的值，即id
+			//    row：当前行的数据
+			//    var a = '<a href="" >测试</a>';
+			// } 
+			} ],
+			pagination : true
+
+		});
+
+	}
+	//查询按钮事件  
+	$('#search_btn').click(function() {
+		$('#test-table').bootstrapTable('refresh', {
+			url : '/getshuju'
+		});
+	})
+	$('#excel_btn').click(function () {
+		$.getJSON("/exportMyTables",function(result){			
+		})
+	})
+</script>
+
+</html>

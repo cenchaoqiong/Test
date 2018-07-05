@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.XmlTest.dao.KehuMapper">
+
+   <!--  <resultMap type="com.XmlTest.bean.kehu" id="pname">
+       
+    </resultMap> -->
+
+    <select id="SelectkehuAll" parameterType="com.XmlTest.bean.Aehu" resultType="com.XmlTest.bean.Aehu">
+        select * from kehu
+        <if test="Name!=null and Name!=''">
+        where dno like concat('%',#{Name},'%')
+        </if>
+         limit #{limit} offset #{offset};
+    </select>
+    <select id="KehuBycount"  resultType="java.lang.Integer">
+        select count(*)  from kehu
+    </select>
+
+    <!--  <select id="update" parameterType="com.shyroke.bean.UserBean">
+        update users set
+        user_name=#{userName},pass_word=#{passWord},create_time=#{createTime}
+        where
+        id=#{id}
+    </select>
+    
+    <select id="del" parameterType="java.lang.Integer">
+        delete from users where id=#{id}
+    </select>
+    
+    <select id="save" parameterType="com.shyroke.bean.UserBean">
+        insert into users(user_name,pass_word,create_time) values(#{userName},#{passWord},#{createTime})
+    </select>-->
+
+</mapper>
